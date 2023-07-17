@@ -1,0 +1,20 @@
+<%= turbo_frame_tag 'modal' do %>
+  <div class="modal">
+    <h1 class="modal__title">
+      <%= @result || 'Error' %>
+    </h1>
+    <p class="modal__description">
+      <% if @throw_service.errors.empty? %>
+         <%= "Curb throw #{@throw_service.server_throw}" %>
+      <% else %>
+        <div class="modal__error">
+          <%= @throw_service.errors.join(', ') %>
+        </div>
+      <% end %>
+    </p>
+    <% if @items_list == GamesController::DEFAULT_ITEMS_LIST %>
+      <%= image_tag("#{@throw_service.server_throw}.svg", class: 'modal__image') %>
+    <% end %>
+    <%= button_tag 'Ok', data: { controller: 'modals', action: 'modals#close' }, class: 'modal__button' %>
+  </div>
+<% end %>

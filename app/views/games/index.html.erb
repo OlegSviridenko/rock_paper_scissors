@@ -1,0 +1,56 @@
+<div class="container">
+  <h1 class="container-header">
+    ROCK – PAPER – SCISSORS
+  </h1>
+  <p class="container-description">
+    Rock Paper Scissors is a zero sum game that is usually played by two people using their hands and no tools. The idea is to make shapes with an outstretched hand where each shape will have a certain degree of power and will lead to an outcome.
+  </p>
+  <div class="game">
+    <h2 class="game-title">
+      SELECT YOUR BET
+    </h2>
+    <div class="game-body">
+      <% @items_list.each do |item|%>
+        <%= link_to new_game_path(user_throw: item), data: { turbo_frame: 'modal' } do %>
+          <div class="game-item">
+            <% if @items_list == GamesController::DEFAULT_ITEMS_LIST %>
+              <%= image_tag("#{item}.svg", class: 'game-item__img') %>
+            <% end %>
+            <span class='game-item__name'>
+              <%= item.humanize %>
+            </span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="container-footer">
+    <p class="container-description">
+      Or you can create your own game with the following rules.
+      <ol>
+        1. Specify an <strong>odd number (Important!)</strong> of elements for the game, separated by a comma in the item list field, otherwise the game logic will be violated.
+      </ol>
+      <ol>
+        2. The game will have a rule that each element will be weaker than the elements following it in the list in an amount equal to half of the total number of elemets. For example, in the game Rock, Hammer, Paper, Scissors, Robot - Rock will be stronger than Scissors and Robot, but weaker than Hammer and Paper
+      </ol>
+      <ol>
+        3. Choose your variant from provided list.
+      </ol>
+    </p>
+
+    <%= form_with url: new_game_path, data: { turbo_frame: 'modal' }, method: :get, class: 'footer__form' do |f| %>
+      <div class="form_item">
+        <%= f.label 'Items List' %>
+        <%= f.text_field :items_list, class: 'footer__input', required: true %>
+      </div>
+      <div class="form_item">
+        <%= f.label 'User throw' %>
+        <%= f.text_field :user_throw, class: 'footer__input', required: true %>
+      </div>
+      <div class="form_item">
+        <%= f.submit 'Make server throw', class: 'button'  %>
+      </div>
+    <% end %>
+  </div>
+</div>
