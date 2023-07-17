@@ -1,24 +1,14 @@
-# README
+# Rock Paper Scissors
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Ruby version - `3.2.2`
+Rails version - `7.1.0.alpha`
 
-Things you may want to cover:
+``bundle install``
+``yarn install``
 
-* Ruby version
+# To start application use
+`rails s`
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+and on
+``localhost:3000/``
+Your find game page
