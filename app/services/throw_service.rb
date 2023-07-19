@@ -1,3 +1,5 @@
+require 'rest-client'
+
 class ThrowService
   attr_accessor :items_list, :server_throw, :user_throw, :errors
 
@@ -26,9 +28,13 @@ class ThrowService
     validate_items_list_structure
   end
 
+  def validate_user_throw
+    errors << wrong_user_throw_error unless items_list.include?(user_throw)
+  end
+
   def make_server_throw
     response = RestClient::Request.execute(method: :get, url: request_url, timeout: 10, open_timeout: 10)
-    response['statusCode'].to_i == 200 && items_list.include?(response['body']) ? response['body'] : random_throw
+    response[:statusCode]&.to_i == 200 && items_list.include?(response[:body]) ? response[:body] : random_throw
   rescue
     random_throw
   end
@@ -41,6 +47,7 @@ class ThrowService
   end
 
   def humanize_result(result)
+    # Should be moved to i18n
     result == true ? 'You win!' : 'You lose!'
   end
 
@@ -66,9 +73,7 @@ class ThrowService
     errors << wrong_items_list_structure_error if items_list.tally.values.any? { |count| count > 1 }
   end
 
-  def validate_user_throw
-    errors << wrong_user_throw_error unless items_list.include?(user_throw)
-  end
+  # Should be moved to i18n
 
   def wrong_user_throw_error
     'Wrong user choice'
