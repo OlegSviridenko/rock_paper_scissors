@@ -14,6 +14,10 @@ describe ThrowService do
   let(:response) { subject.call }
   let(:errors) { subject.errors }
 
+  let(:win) { 'You win!' }
+  let(:lose) { 'You lose!' }
+  let(:draw) { 'Draw!' }
+
   before do
     stub_const('GamesController::DEFAULT_ITEMS_LIST', default_items_list)
     allow(RestClient::Request).to receive(:execute).and_return(curb_response)
@@ -70,7 +74,7 @@ describe ThrowService do
     let(:server_throw) { user_throw }
 
     it 'makes request to another service' do
-      expect(response).to eq 'Draw!'
+      expect(response).to eq draw
       expect(subject.server_throw).to eq user_throw
     end
 
@@ -80,7 +84,7 @@ describe ThrowService do
       before { allow(subject).to receive(:random_throw).and_return(server_throw) }
 
       it 'makes random throw when request is invalid' do
-        expect(response).to eq 'Draw!'
+        expect(response).to eq draw
         expect(subject.server_throw).to eq server_throw
       end
     end
@@ -98,7 +102,7 @@ describe ThrowService do
 
         it 'when index of user throw is lower than server throw' do
           # Also should be moved to i18n
-          expect(response).to eq 'You lose!'
+          expect(response).to eq lose
         end
       end
 
@@ -107,7 +111,7 @@ describe ThrowService do
 
         it 'when index of user throw is greater than server throw' do
           # Also should be moved to i18n
-          expect(response).to eq 'You win!'
+          expect(response).to eq win
         end
       end
     end
@@ -118,7 +122,7 @@ describe ThrowService do
         let(:server_throw) { items_list.last }
 
         it 'when user throw in beginning and server throw in the end of items list' do
-          expect(response).to eq 'You win!'
+          expect(response).to eq win
         end
       end
 
@@ -127,7 +131,7 @@ describe ThrowService do
         let(:server_throw) { items_list.first }
 
         it 'when user throw in the end of items list and server throw in beginning' do
-          expect(response).to eq 'You lose!'
+          expect(response).to eq lose
         end
       end
     end
