@@ -1,0 +1,39 @@
+name: CI
+on:
+
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.80.0
+        with:
+          ruby-version: 3.2.2
+
+      - uses: Borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+
+      - name: Install Dependencies
+        run: |
+          sudo apt install -yqq libpq-dev
+          gem install bundler
+
+      - name: Install Gems
+        env:
+          RAILS_ENV: development
+        run: |
+          bundle install
+
+      - name: Build and run
+        env:
+          RAILS_ENV: development
+        run: |
+          bundle exec rails s
